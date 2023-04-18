@@ -3,6 +3,7 @@ import { create } from "zustand";
 export const useStore = create((set) => ({
   transactions: [
     {
+      id: "asdasdasd1",
       type: "income",
       amount: 2000,
       name: "wage",
@@ -12,6 +13,7 @@ export const useStore = create((set) => ({
       legendFontSize: 15,
     },
     {
+      id: "asdasdasdas2",
       type: "expense",
       amount: 200,
       name: "grocery",
@@ -24,4 +26,8 @@ export const useStore = create((set) => ({
   addTransaction: (newTransaction) =>
     set((state) => ({ transactions: [newTransaction, ...state.transactions] })),
   setInitialState: (list) => set((state) => ({ transactions: [...list] })),
+  deleteTransaction: (id) =>
+    set((state) => ({
+      transaction: state.transactions.filter((el) => el.id !== id),
+    })),
 }));

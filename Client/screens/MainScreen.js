@@ -2,6 +2,7 @@ import { Text, View, TextInput, StyleSheet, FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import { useStore } from "../store/zustand/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
 
 import CustomBtn from "../components/ui/CustomBtn";
 import CustomInput from "../components/ui/CustomInput";
@@ -17,11 +18,23 @@ function MainScreen() {
   const addTransaction = useStore((state) => state.addTransaction);
   const storeTransactions = useStore((state) => state.transactions);
   const setInitialState = useStore((store) => store.setInitialState);
+  const deleteTransaction = useStore((state) => state.deleteTransaction);
 
+  console.log(uuid.v4());
   function transactionRenderer(dataItem) {
-    return <TransactionItem dataItem={dataItem} />;
+    return (
+      <TransactionItem
+        dataItem={dataItem}
+        id={dataItem.item.id}
+        onDelete={deleteHandler}
+      />
+    );
   }
-
+  function deleteHandler(id) {
+    console.log(id);
+    const newList = storeTransactions.filter((el) => el.id !== id);
+    setInitialState(newList);
+  }
   // Save transaction data to local storage
   const saveTransactions = async (transactions) => {
     try {
@@ -37,10 +50,6 @@ function MainScreen() {
     try {
       const value = await AsyncStorage.getItem("transactions");
       if (value !== null) {
-        // We have data!!
-        console.log(":::XX", value);
-        console.log(":::XXparsed", JSON.parse(value));
-
         return JSON.parse(value);
       }
     } catch (error) {
@@ -65,7 +74,11 @@ function MainScreen() {
       date: null,
       color: null,
       name: null,
+      legendFontColor: null,
+      legendFontSize: null,
+      id: null,
     };
+
     const formattedDate = `${new Date()
       .getDate()
       .toString()
@@ -91,6 +104,7 @@ function MainScreen() {
       setExpense("");
       setExpenseName("");
     }
+    myObj.id = uuid.v4();
     myObj.date = formattedDate;
     myObj.color = `${getRandomColor()}`;
     myObj.legendFontColor = "#FE6244";

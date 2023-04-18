@@ -1,24 +1,47 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useStore } from "../../../store/zustand/store";
 
-function TransactionItem({ dataItem }) {
+function TransactionItem({ dataItem, id, onDelete }) {
   const { type, amount, date, name } = dataItem.item;
   console.log(dataItem.item);
   if (type === "income") {
     return (
       <View style={styles.incomeCt}>
-        <Text style={styles.incomeInfo}>
-          {name}: +{amount}$
-        </Text>
-        <Text style={styles.date}>{date}</Text>
+        <Pressable
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+          onPress={() => {
+            onDelete(dataItem.item.id);
+          }}
+        >
+          <Text style={styles.incomeInfo}>
+            {name}: +{amount}$
+          </Text>
+          <Text style={styles.date}>{date}</Text>
+        </Pressable>
       </View>
     );
   } else if (type === "expense") {
     return (
       <View style={styles.expenseCt}>
-        <Text style={styles.expenseInfo}>
-          {name}: -{amount}$
-        </Text>
-        <Text style={styles.date}>{date}</Text>
+        <Pressable
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+          onPress={() => {
+            onDelete(dataItem.item.id);
+          }}
+        >
+          <Text style={styles.expenseInfo}>
+            {name}: -{amount}$
+          </Text>
+          <Text style={styles.date}>{date}</Text>
+        </Pressable>
       </View>
     );
   }

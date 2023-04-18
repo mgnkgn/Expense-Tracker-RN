@@ -21,7 +21,7 @@ function HistoryScreen() {
 
   const incomeArr = storeTransactions.filter((el) => el.type === "income");
   const expenseArr = storeTransactions.filter((el) => el.type !== "income");
-  console.log(":::", incomeArr);
+  // console.log(":::", incomeArr);
 
   const xValuesIncome = incomeArr.map((item) => item.date);
   const yValuesIncome = incomeArr.map((item) => parseInt(item.amount));
